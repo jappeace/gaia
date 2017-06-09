@@ -1,0 +1,5 @@
+#+TITLE: Gaia
+
+Place holder project for when I finish porting the chatbot to gralde and
+akka and thereby having all the copyright,
+or get permission to use the original stuff.
