@@ -1,0 +1,6 @@
+literals:
+  - Hello
+  - Hi
+
+regexes:
+  - "hello (?<name>.*)"

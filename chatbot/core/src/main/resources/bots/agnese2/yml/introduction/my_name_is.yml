@@ -1,0 +1,5 @@
+literals:
+  - My name is agnese # just insert the bot name
+
+regexes:
+  - "[mM]y name is (?<name>.*)" # capture user name

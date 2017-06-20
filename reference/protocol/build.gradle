@@ -1,0 +1,10 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.github.gtache:scalajs-plugin:sjs0.6_${versions.major}_0.3.0"
+    }
+}
+
+apply plugin: 'scalajs-plugin'

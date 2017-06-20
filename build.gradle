@@ -1,0 +1,22 @@
+plugins {
+  id 'org.ensime.gradle' version '0.2.8'
+}
+allprojects{
+
+	repositories {
+		mavenLocal()
+		mavenCentral()
+		maven {
+			url 'https://repository.jboss.org/nexus/content/groups/public/'
+		}
+	}
+}
+subprojects {
+	ext {
+		versions = [
+			drools: '6.5.0.Final', 
+			major: '2.12', // major scala version
+		]
+		versions['scala'] = versions.major + '.2'
+	}
+}

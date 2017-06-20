@@ -1,0 +1,23 @@
+<html>
+<body>
+<div>Hello World!</div>
+
+<form action="#">
+    <label for="name">Name: </label><input id="name" type="text" />
+    <input id="join" type="button" value="Join!"/>
+</form>
+
+<form action="#">
+    <label for="message">Say something: </label><input id="message" type="text" />
+    <input id="send" type="button" value="Send" disabled="true"/>
+</form>
+
+<div id="playground"/>
+
+<script type="text/javascript" src="client.js"></script>
+<script>
+((typeof global === "object" && global &&
+         global["Object"] === Object) ? global : this)["nl"]["jappieklooster"]["chatbot"]["client"]["Frontend"]().main();
+</script>
+</body>
+</html>

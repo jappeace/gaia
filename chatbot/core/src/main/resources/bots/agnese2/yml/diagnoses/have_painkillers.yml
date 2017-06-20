@@ -1,0 +1,6 @@
+literals:
+  - Oh yes then you need some pain killers for this.
+
+regexes:
+  - "pain(.*)kil+ers?"
+

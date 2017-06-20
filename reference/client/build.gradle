@@ -1,0 +1,35 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.github.gtache:scalajs-plugin:sjs0.6_${versions.major}_0.3.0"
+    }
+}
+
+
+apply plugin: 'scalajs-plugin'
+
+dependencies {
+	compile(project(":reference:protocol"))
+	compile "org.scala-js:scalajs-dom_sjs0.6_${versions.major}:0.9.1"
+	compile "com.lihaoyi:upickle_sjs0.6_${versions.major}:0.4.4"
+	compile "com.lihaoyi:utest_sjs0.6_${versions.major}:0.4.5"
+}
+
+// there is currently a bug that does some dumb state checking of 
+// options as a caching mechanism: https://github.com/gtache/scalajs-gradle/issues/21
+// these tasks change options so now the script works in deamon mode
+FastOptJS.dependsOn NoOptJS
+
+// caching on task level is also broken even better, always do this
+// so just execute always
+NoOptJS.outputs.upToDateWhen { false }
+FastOptJS.outputs.upToDateWhen { false }
+
+// so the dependencies are like: NoOptJS << FastOptJS << jar
+// this can then be used by the server (as compile dependency)
+// turns out this tricks alternates... its the best we're gonna get
+jar.dependsOn FastOptJS
+
+

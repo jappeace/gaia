@@ -1,0 +1,17 @@
+apply plugin: 'java'
+dependencies {
+	// Drools
+    compile "org.kie:kie-api:${versions.drools}"
+    runtime "org.drools:drools-compiler:${versions.drools}"
+
+	// kindoff important for stream api
+	compile "org.javatuples:javatuples:1.2"
+	// immutable annotation
+	compile "com.google.code.findbugs:jsr305:3.0.1"
+	// functional libs, mainly used for an either type
+	compile "io.atlassian.fugue:fugue:4.3.0"
+	// to reverse a list (and a bunch of other stuff I guess)
+	compile "com.google.guava:guava:21.0"
+	// String tempalte, a template engine to fill in 'gaps' in literals
+	compile "org.antlr:ST4:4.0.8"
+}

@@ -1,0 +1,81 @@
+from:
+ - ask_reason_here
+to:
+ - symbol: back_pain
+   values:
+     - Scary
+ - symbol: need_medicine
+   values:
+     - Concerned
+to_defaults:
+   restricted_to: patient
+--- 
+from:
+  - need_medicine
+to:
+  - symbol: why_need_medicine
+    restricted_to: doctor
+    values:
+      - Surprised
+---
+from:
+  - why_need_medicine
+to: 
+  - symbol: watering_plants
+    restricted_to: patient
+    values:
+      - Enthusiasm
+---
+from:
+  - watering_plants
+to: 
+  - symbol: back_pain_suddenly
+    restricted_to: patient
+    values:
+     - Surprised
+  - symbol: to_much_water
+    restricted_to: patient
+---
+from:
+  - back_pain_suddenly
+to: 
+  - symbol: maybe_allergic_to_plants
+    restricted_to: patient
+---
+from:
+  - maybe_allergic_to_plants
+to:
+  - symbol: scan
+    scene: diagnoses
+    restricted_to: doctor
+---
+from:
+ - back_pain
+to:
+ - symbol: when_occurred
+   restricted_to: doctor
+--- 
+from:
+ - when_occurred
+to:
+ - symbol: lifting_object
+ - symbol: watering_plants
+to_defaults:
+  restricted_to: patient
+---
+from:
+ - lifting_object
+to:
+ - symbol: have_painkillers
+   restricted_to: doctor
+   scene: diagnoses
+---
+from:
+  - to_much_water
+to:
+  - symbol: agree
+  - symbol: have_painkillers
+  - symbol: scan
+to_defaults:
+  scene: diagnoses
+  restricted_to: doctor

@@ -1,0 +1,36 @@
+from:
+  - agree
+to:
+  - symbol: appointment
+    restricted_to: doctor
+---
+from:
+  - appointment
+to:
+  - symbol: confirm
+    restricted_to: patient
+---
+from:
+  - confirm
+  - thanks
+to:
+  - symbol: goodbye
+---
+from:
+  - confirm
+to:
+  - symbol: have_painkillers
+    restricted_to: doctor
+    scene: diagnoses
+---
+from:
+  - goodbye
+to:
+  - symbol: goodbye
+
+---
+from:
+  - thanks
+to:
+  - symbol: thanks
+

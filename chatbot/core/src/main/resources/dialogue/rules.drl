@@ -1,0 +1,130 @@
+package dialogue
+
+
+rule "Create default reply"
+when
+	$symbol_database:SymbolDatabase()
+then
+	log.info(drools.getRule().getName());
+	delete($symbol_database);
+	insert(new DefaultReply($symbol_database.get("nonsense").orElseThrow(
+		()->new RuntimeException("I can't find nonsense anywhere :s ")
+	)));
+end
+
+rule "Parse raw user utterence into parsed utterance (something we understand)"
+when
+	$utterance:UnparsedUserUtterance()
+	$patterns:PatternCollection()
+	$scene:Scene()
+then
+	log.info("Starting my glorious deliberation, trying to find the meaning of " + $utterance.getValue());
+	delete($utterance);
+	ParsedUtterance utt = parseUtterance($patterns.inScene, $utterance, $scene);
+	log.info("aahhhh we have some " + utt);
+	InScene insceneUtt = new InScene($utterance);
+	log.info("and the in scene utt: " +insceneUtt);
+	log.info("Obviously it means: " + utt);
+	insert(utt);
+	insert(insceneUtt);
+end
+
+function ParsedUtterance parseUtterance(PatternDatabase patterns, UnparsedUserUtterance str, Scene active_scene){
+	List<SymbolCapture> result = patterns.parseUtterance(str, active_scene);
+	return new ParsedUtterance(result);
+}
+
+rule "Use Neigbourscene if inscene didn't find anything"
+when
+	$parsedUtt:ParsedUtterance(this.isEmpty())
+	$inScene:InScene()
+	$patterns:PatternCollection()
+	$scene:Scene()
+then
+	delete($parsedUtt);
+	delete($inScene);
+	log.info("Using neigbour scene");
+	ParsedUtterance utt = parseUtterance($patterns.neighbourToScene, $inScene.getSource(), $scene);
+	insert(utt);
+	insert(new NeigbourScene($inScene.getSource()));
+end
+
+rule "Give a default reply if there are no results"
+when
+	$utterance:ParsedUtterance(this.isEmpty())
+	$scene:NeigbourScene()
+	DefaultReply($symbol:symbol)
+then
+	delete($utterance);
+	delete($scene);
+	log.info("ignoring, couldn't find a match for '" + $utterance + "'");
+	// TODO with use the current agent as who??
+	// Utterance utt = Utterance.create(who??, $symbol)
+	// insert(new Reply(utt))
+end
+
+rule "Insert all uniquely parsed utterences as symbols"
+when
+	$utterance:ParsedUtterance(!this.isEmpty())
+then
+	delete($utterance);
+
+	List<SymbolCapture> symbolList = $utterance.getSymbolCapturedMatchDBList();
+	if(symbolList.size() > 1){
+		log.warning("Multiple matches found, expect multiple replies");
+	}
+
+	Set<Symbol> seen = new HashSet<>();
+
+	for(SymbolCapture capture : symbolList){
+		if(seen.contains(capture.symbol)){
+			continue;
+		}
+		seen.add(capture.symbol);
+		insert(capture);
+	}
+end
+
+rule "We got a reply, delete all markers"
+when
+	Reply()
+	$proc:FinishedProcess()
+then
+	delete($proc);
+end
+
+rule "We didn't get a reply but were just an inscene, attempt as neibourscene"
+when
+	not Reply()
+	$proc:FinishedProcess()
+	$inscene:InScene()
+	$patterns:PatternCollection()
+	$scene:Scene()
+then
+	log.info("No success inscene, trying as neigbour");
+	delete($inscene);
+	delete($proc);
+	ParsedUtterance utt = parseUtterance($patterns.neighbourToScene, $inscene.getSource(), $scene);
+	insert(utt);
+	insert(new NeigbourScene($inscene.getSource()));
+end
+
+rule "We didn't get a reply, and were neigbour scene... default reply (or do nothing)"
+when
+	not Reply()
+	$proc:FinishedProcess()
+	$utterance:NeigbourScene()
+then
+	delete($utterance);
+	delete($proc);
+end
+
+rule "Update scene with reply if neccisary"
+when
+	$active:Scene()
+	Reply($reply_scene : this.with.what.scene, this.with.what.scene != $active)
+then
+	log.info("transition from " + $active + " to " + $reply_scene);
+	delete($active);
+	insert($reply_scene);
+end

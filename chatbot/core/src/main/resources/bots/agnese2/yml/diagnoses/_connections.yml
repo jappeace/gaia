@@ -1,0 +1,29 @@
+from:
+ - have_painkillers
+to:
+ - symbol: thanks
+   restricted_to: patient
+   scene: finishing
+ - symbol: scan
+   restricted_to: doctor
+   values: [concerned]
+---
+from:
+  - scan
+to:
+  - symbol: agree
+    scene: finishing
+    restricted_to: patient
+    values: [polite]
+  - symbol: give_painkillers
+    restricted_to: patient
+---
+from:
+  - give_painkillers
+to:
+  - symbol: have_painkillers
+    restricted_to: doctor
+    values: [polite]
+  - symbol: appointment
+    restricted_to: doctor
+    scene: finishing

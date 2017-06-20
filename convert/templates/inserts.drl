@@ -1,0 +1,16 @@
+// Auto generated from insert tags
+// We can match simply on symbol name and then reinsert the type
+package {{package}};
+
+{% for symbol in symbols %}
+rule "insert types when symbol {{symbol.name}} was uttered"
+when
+	$pre:PreProcessed($symbol:utterance.what, $symbol.name == "{{symbol.scene}}/{{symbol.name}}")
+then
+	log.info(drools.getRule().getName());
+	{% for insert in symbol.inserts %}
+	{{insert.type}} obj{{loop.index}} = new {{insert.type}}();
+	insert(obj{{loop.index}});
+	{% endfor %}
+end
+{% endfor %}

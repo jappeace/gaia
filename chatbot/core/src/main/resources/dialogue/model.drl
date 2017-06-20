@@ -1,0 +1,34 @@
+package dialogue;
+
+declare DefaultReply
+	symbol:Symbol
+end
+
+// ready to process (ie these rules are done with it)
+declare PreProcessed
+	utterance:Utterance
+end
+
+// processing done, use this to reply
+declare Reply
+	with:Utterance
+	insertQueries:QueryDatabase // = QueryDatabase.empty, I don't know how to do default values
+end
+
+// marker type to signify processing has started
+declare Parsing
+end
+
+declare FinishedProcess
+end
+
+// we used the inscene matching
+declare InScene
+	source : UnparsedUserUtterance
+end
+
+// we used the neigbourscene matching
+declare NeigbourScene
+	source : UnparsedUserUtterance
+end
+

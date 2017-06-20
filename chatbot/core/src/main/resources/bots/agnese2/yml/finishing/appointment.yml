@@ -1,0 +1,8 @@
+literals:
+  - So let's plan a scan at the hospital next Friday at 13:00?
+
+regexes:
+  - "plan"
+  - "hospital"
+  - "appointment"
+

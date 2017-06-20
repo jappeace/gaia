@@ -1,0 +1,8 @@
+package personality;
+
+declare PersonalityProcess
+	under_consideration: DialogueTree
+	believes : Believes
+	functionTasks : List
+end
+

@@ -1,0 +1,46 @@
+package scenario
+
+import dialogue.PreProcessed
+import dialogue.Reply
+
+import org.salve.drools.model.template.db.QueryDatabase
+import org.salve.drools.model.Informative
+import org.salve.drools.model.Utterance
+import org.salve.drools.model.Scene
+import org.salve.drools.model.values.PerlocutionaryValueSet
+import org.salve.drools.GameStart
+
+import org.salve.personality.model.Believes
+
+import java.text.SimpleDateFormat
+
+import java.util.Random;
+import java.util.logging.Logger;
+
+global org.salve.drools.controller.DroolInterface controller
+global Random random;
+global Logger log;
+
+rule "init"
+when
+	$game:GameStart()
+then
+	log.info("starting game");
+	Scene scene = new Scene("introduction");
+	insert(scene);
+end
+
+rule "Low level hello replies with hello first time"
+when
+	$pre:PreProcessed($symbol:utterance.what, $symbol.name == "introduction/greeting", $actor:utterance.byWhom)
+	$believes:Believes($actor != self)
+then
+	log.info("low level entry");
+	delete($pre);
+
+	final Informative infor = new Informative($believes.self, $symbol);
+	final Utterance resulting = $believes.findToFromLastUttTo(infor)
+		.map(Utterance::createFromConnection)
+		.orElse(Utterance.create(infor.who, infor.what, PerlocutionaryValueSet.empty));
+	insert(new Reply(resulting.setByWhom(infor.who), QueryDatabase.empty));
+end

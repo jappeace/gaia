@@ -1,0 +1,50 @@
+apply plugin: 'scala'
+apply plugin: 'application'
+
+
+dependencies {
+    compile "org.scala-lang:scala-library:${versions.scala}"
+
+	// protocol
+	compile(project(":reference:protocol"))
+
+	// file reader for yaml files, and pulls in the bot
+	compile(project(":chatbot:filereader"))
+
+	// akka
+	compile "com.typesafe.akka:akka-stream_${versions.major}:2.5.2"
+	compile "com.typesafe.akka:akka-http_${versions.major}:10.0.6"
+
+	// duno
+	compile "org.specs2:specs2-core_${versions.major}:3.8.9"
+	// makes an intermediate format from the protocol
+	compile "com.lihaoyi:upickle_${versions.major}:0.4.4"
+
+	// builds js file
+	compile(project(":reference:client"))
+
+}
+task copyJS(type: Sync) {
+	from(project(":reference:client").file("build/js"))
+	final fromfile = "client_fastopt.js"
+	include(fromfile)
+
+	// give the right name
+	rename(fromfile, 'client.js')
+
+	// copy too
+	final destination = project.file("./build/resources/main/")
+	into destination
+
+	// don't delete other files already in resources
+    eachFile {
+        if (it.getRelativePath().getFile(destination).exists()) {
+            it.exclude()
+        }
+    }
+}
+processResources.dependsOn copyJS
+run {
+    mainClassName = 'nl.jappieklooster.chatbot.server.Boot'
+    standardInput = System.in
+}

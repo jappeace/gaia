@@ -1,0 +1,6 @@
+literals:
+  - We need to scan your back
+
+regexes:
+  - "scan(.*) back"
+

@@ -1,0 +1,42 @@
+# there should always be a goal order, therefore the utility is just based upon
+# index in the below list:
+goals:
+  - actor: doctor
+    scene: diagnoses
+    symbol: have_painkillers
+  - actor: patient
+    scene: information_gathering
+    symbol: back_pain
+  - actor: patient
+    scene: diagnoses
+    symbol: give_painkillers
+
+values:
+  enlightening: 12
+  happy: 10
+  enthusiasm: 8
+  polite: 5
+  surprised: 5
+  concerned: 3
+  convincing: 1
+  persuading: -3
+  sad: -7
+  impatient: -8
+  condecending: -8
+  angry: -9
+  scary: -10
+  confused: -12
+
+self: patient
+
+actors:
+  - patient
+  - doctor
+
+# INTJ
+# personality: [Ni, Te, Fi, Se]
+# ENFP
+personality: [Ne, Fi, Te, Si]
+# ISTP
+# personality: [Ti, Se, Ni, Fe]
+

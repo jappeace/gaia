@@ -1,0 +1,5 @@
+literals:
+  - Medicine, why do you need that?
+
+regexes:
+  - "[Ww]hy (.*)"

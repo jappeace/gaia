@@ -1,0 +1,6 @@
+literals:
+  - When did this first occur?
+
+regexes:
+  - "[Ww]hen (.*)"
+

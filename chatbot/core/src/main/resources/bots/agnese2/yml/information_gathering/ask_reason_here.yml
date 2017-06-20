@@ -1,0 +1,6 @@
+literals:
+  - How can I help you?
+
+regexes:
+ - "help you"
+ - "can I help"

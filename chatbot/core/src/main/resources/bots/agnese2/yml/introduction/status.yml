@@ -1,0 +1,6 @@
+literals:
+  - How are you today?
+
+regexes:
+  - "[hH]ow are you"
+

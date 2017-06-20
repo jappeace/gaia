@@ -1,5 +1,29 @@
-#+TITLE: Gaia
+#+TITLE: Gaia chatbot
 
-Place holder project for when I finish porting the chatbot to gralde and
-akka and thereby having all the copyright,
-or get permission to use the original stuff.
+This is a chatbot that can have varied respones depening on personality.
+
+Origanlly based upon the `salve' architecture, we moved away to a yaml based
+one.
+
+* Done
++ ScalaJS + Akka http in gradle
++ copied source code over from old maven build
++ Connect akkahttp server to drools chatbot
++ Delete drools about sp and such (Not really used, also copyrithgt stuff)
+  + Make sure git fame says pracitcally 0 lines are from manuel
+  + Copy to a new repository so that we don't commit infringement on history
+
+* TODO todo
++ Make a proper readme that describes what this chatbot does.
+  + Difference from ALICE (both images)
+  + The mapping with connections
+  + List possible advantages
+  + Eventually tell for the detailed description there is the thesis
++ Fix the horible client layout.
+  + Could make an auto logon (on page load)
+  + Enter text below and messages that are older moving up
+    (it just seems unatural pushing older messages down.)
+
+* License
+Note that in the reference implementation I used the following project:
+[[https://github.com/jrudolph/akka-http-scala-js-websocket-chat]]

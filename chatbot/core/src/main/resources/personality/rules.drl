@@ -1,0 +1,149 @@
+package personality
+
+rule "Utterence into personality process"
+salience -10 // give low level replies a chance
+when
+	$pre:PreProcessed($utterance:Utterance)
+	$believes: Believes()
+	not PersonalityProcess()
+then
+	log.info(drools.getRule().getName() + $utterance);
+	final DialogueTree tree = DialogueTree.createFromUtteranceAndBelieves($utterance, $believes);
+	List toProcess = $believes.personality.copyToList();
+	List reversed = $believes.personality.copyToList();
+	Collections.reverse(reversed);
+	toProcess.addAll(reversed);
+	delete($believes);
+	delete($pre);
+	insert(new PersonalityProcess( tree , $believes, toProcess ));
+end
+
+rule "Pop next function from personality process"
+when
+	$process: PersonalityProcess(!functionTasks.isEmpty())
+	$jungfunc : JungianFunction() from $process.getFunctionTasks().get(0)
+	not JungianFunction()
+then
+	log.info("popping " + $jungfunc);
+	delete($process);
+	$process.getFunctionTasks().remove(0);
+	insert($process);
+	insert($jungfunc);
+end
+
+rule "Process function"
+when
+	$process: PersonalityProcess()
+	$func:JungianFunction()
+then
+	log.info("processing" + $func);
+	final JungFuncArgs basicargs = JungFuncArgs.create(
+		$process.getBelieves(),
+		$process.getUnder_consideration()
+	);
+	List nextFuncs = $process.getBelieves().personality.dropUntill($func);
+	log.info("next functions: " + nextFuncs);
+	final JungFuncArgs args = basicargs.insertNextFuncs(nextFuncs);
+	final JungFuncArgs result = $func.getFunction().apply(
+		args
+	);
+	//log.info("resulting dialoguetree: " + result.tree);
+	delete($process);
+
+	log.info("learned values " + result.believes.learnedValues);
+
+	$process.setBelieves(result.believes);
+	$process.setUnder_consideration(result.tree);
+	insert($process);
+	delete($func);
+end
+
+rule "End personality process"
+when
+	$default: DefaultReply()
+	not JungianFunction() // because they still may be bussy
+	$process: PersonalityProcess(functionTasks.isEmpty(), $actor:believes.self, $tree:under_consideration)
+	if( $tree.isPrefferedBy($actor) ) do [PopOption]
+then
+	log.info("Ending process");
+	log.info("with preffered utt option: " + $tree.getPrefferedUtterance());
+	delete($process);
+	log.info("inserting new believes");
+	insert($process.getBelieves());
+	insert(new FinishedProcess());
+
+then[PopOption]
+	log.info("Popping an option");
+
+	delete($process);
+
+	Believes believes = $process.getBelieves();
+
+	final Reply selected = $tree.getPrefferdOption().map(opt -> new Reply(opt.utterance, opt.connectionUsed.queries)).orElse(
+		new Reply(
+			Utterance.create(believes.getAnotherActor().get(), $default.getSymbol(), PerlocutionaryValueSet.confused),
+			QueryDatabase.empty
+		)
+	);
+
+	log.info("I'm gonna say " + selected);
+
+	insert($process.getBelieves());
+	insert(selected);
+end
+
+// TODO figure out how to move this rule back to drools project once you know how to untangle believes from it
+rule "Selected utterence into a response"
+salience -10 // allow rules to intercept the reply and do stuff (such as update the scene)
+when
+	$resp:Reply()
+	$believes: Believes()
+then
+	delete($resp);
+	Utterance reply = $resp.getWith();
+
+	log.info("My glorious deliberation has come to an end, I'll say: " + reply.getWhat());
+
+	Believes newBelieves = $believes.addUtterance(reply);
+	delete($believes);
+	insert(newBelieves);
+
+	// allow another round of processing, to do a double pop.
+	log.info("Re-insert " + reply + " to see if there is more to say");
+	insert(new PreProcessed(reply));
+	// reinsert our new world believes
+	MatchedQueryDatabase db = $resp.getInsertQueries().findMatch($believes.getUtterancesReversed()).get();
+	controller.respond(reply.getWhat().randomLiteral(random, db));
+end
+
+// TODO figure out how to move this rule back to drools project once you know how to untangle believes from it
+rule "Parse captured symbol into utterence"
+when
+	$capture : SymbolCapture()
+	$believes: Believes()
+then
+    Symbol symbol = $capture.symbol;
+	log.info(drools.getRule().getName());
+	Actor probablyUser = $believes.getAnotherActor()
+		.orElseThrow(
+			()->new RuntimeException("Could not find other actors for " + $believes.self + " please update your believes.yml")
+		);
+	log.info(symbol + " was obviously said by " + probablyUser);
+	final Informative infor = new Informative(probablyUser, symbol);
+	final Utterance resulting = $believes.findToFromLastUttTo(infor)
+		.map(connection -> Utterance.createFromConnection(connection, $capture.db))
+		.orElse(Utterance.create(infor.who, infor.what, PerlocutionaryValueSet.confused, $capture.db));
+
+    // disable this rule
+	delete($capture);
+
+	// agent remember utterence
+	final Believes updated = $believes.addUtterance(resulting);
+
+	log.info("The conversation I remembered: " + updated.getUtterancesReversed().collect(Collectors.toList()));
+	delete($believes);
+	insert(updated);
+
+	// as last to prevent other drools from firing with outdated believes
+	insert(new PreProcessed(resulting));
+end

@@ -1,0 +1,89 @@
+from:
+ - greeting
+to:
+ - symbol: greeting # should this be commented out because of the shortcut?
+   values: # no it shouldn't, this forces Fi to d
+    - Polite
+ - symbol: status
+   restricted_to: patient
+   values:
+    - Polite
+    - Enthusiasm
+ - symbol: ask_reason_here
+   scene: information_gathering
+   restricted_to: doctor
+ - symbol: my_name_is
+---
+from:
+ - status
+to:
+ - symbol: ask_reason_here
+   scene: information_gathering
+   restricted_to: doctor
+   values:
+     - Impatient
+ - symbol: good
+   restricted_to: doctor
+   values:
+     - Polite
+     - Happy
+ - symbol: made_a_friend
+   restricted_to: patient
+   utterances:
+     friend:
+       symbol: my_name_is
+       actor: doctor
+       match: name
+   values:
+     - happy
+     - enlightening
+ - symbol: deep_conversation
+   restricted_to: patient
+   utterances:
+     pall:
+       symbol: my_name_is
+       actor: doctor
+       match: name
+   values:
+     - happy
+     - enlightening
+     - polite
+   before:
+     who: doctor
+     said: greeting
+---
+from:
+ - good
+to:
+ - symbol: ask_reason_here
+   scene: information_gathering
+   restricted_to: doctor
+   values:
+     - Concerned
+---
+from:
+ - my_name_is
+to:
+ - symbol: wow_name
+   restricted_to: patient
+   values:
+     - enlightening
+   utterances:
+     name:
+       symbol: my_name_is
+       actor: doctor
+       match: name
+ # add utterances
+---
+from:
+ - wow_name
+to:
+ - symbol: status
+
+---
+from:
+ - made_a_friend
+to:
+ - symbol: ask_reason_here
+   scene: information_gathering
+
