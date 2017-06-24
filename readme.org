@@ -82,3 +82,5 @@ this will make it easier to use this project commercially.
 Finally the conversion script is licensed under GPLv2,
 I hope people will share their contributions to this script
 (but once ran you no longer need it).
+
+If your project requires different licenses please contact [[https://jappieklooster.nl][me]].
