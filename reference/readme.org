@@ -1,0 +1,12 @@
+#+TITLE: Gaia reference implementation
+
+This sets up an akka actor server that delivers a webpage.
+The webpage then is connected trough a websocket with the server. 
+From the webpage user can send messages that are send trough the websocket to
+the server, server then sends the messages to drools,
+and drools finally can send messages back.
+
+I just modified [[https://github.com/jrudolph/akka-http-scala-js-websocket-chat][this project]] to work with the chatbot.
+
+If you want to make a different implementation all the interesting code is in
+the BotFace file of the server.

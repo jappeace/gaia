@@ -1,15 +1,17 @@
 #+TITLE: Chatbot code
 
-These subprojects are releated to the chatbot library.
+These subprojects are the chatbot library.
+The file reader is seperated from the core because it just deals with YAML.
+Which then gets put into the model described by the core.
+
+The entire core is driven by drool rules.
+To see how this is used please look at the reference implementation.
 
 * Core
-The low level contains the basic data structures and some drool rules that 
-act upon that.
-Think parsing the user utterance for example in to symbols.
+Contains the rules, personality and the model (data structures) of the chatbot.
 
 * File reader
 The file reader uses lowlevel datamodel to construct the database.
 
-* Personality
-High level provides structure and rules to do high level deliberation.
-We encoded personality into this.
+* License
+Both these are LGPL
