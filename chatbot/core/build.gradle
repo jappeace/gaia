@@ -1,5 +1,6 @@
 apply plugin: 'java'
 dependencies {
+    testCompile 'junit:junit:4.12'
 	// Drools
     compile "org.kie:kie-api:${versions.drools}"
     runtime "org.drools:drools-compiler:${versions.drools}"
