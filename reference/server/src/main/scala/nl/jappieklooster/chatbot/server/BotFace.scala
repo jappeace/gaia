@@ -83,6 +83,7 @@ object BotFace{
     }
     def chatWithBot(userMsg:String) = {
     	kSession.insert(new UnparsedUserUtterance(userMsg));
+      actor ! Protocol.ChatMessage("user", userMsg)
     }
   }
 }
