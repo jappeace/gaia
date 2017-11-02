@@ -1,23 +1,46 @@
 <html>
+	<head>
+		<title>Gaia chatbot</title>
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+	</head>
 <body>
-<div>Hello World!</div>
 
-<form action="#">
-    <label for="name">Name: </label><input id="name" type="text" />
-    <input id="join" type="button" value="Join!"/>
-</form>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+<div class="container">
+	<form action="#">
 
-<form action="#">
-    <label for="message">Say something: </label><input id="message" type="text" />
-    <input id="send" type="button" value="Send" disabled="true"/>
-</form>
+        <div class="form-group row">
+		  <label for="name" class="col-2 col-form-label">Name: </label>
+          <div class="col-10">
+          <input class="form-control" id="name" type="text" />
+          </div>
+        </div>
+		<input id="join" class="btn btn-primary"  type="button" value="Join!"/>
+	</form>
 
-<div id="playground"/>
+	<form action="#">
+        <div class="form-group row">
+		  <label for="message" class="col-2 col-form-label">Say something:</label>
+          <div class="col-10">
+          <input class="form-control" id="message" type="text" />
+          </div>
+        </div>
+		<input id="send" class="btn btn-primary" type="button" value="Send" disabled="true"/>
+	</form>
 
-<script type="text/javascript" src="client.js"></script>
-<script>
-((typeof global === "object" && global &&
-         global["Object"] === Object) ? global : this)["nl"]["jappieklooster"]["chatbot"]["client"]["Frontend"]().main();
-</script>
+	<div id="playground"/>
+
+	<script type="text/javascript" src="client.js"></script>
+	<script>
+	((typeof global === "object" && global &&
+			 global["Object"] === Object) ? global : this)["nl"]["jappieklooster"]["chatbot"]["client"]["Frontend"]().main();
+	</script>
+</div>
 </body>
 </html>
