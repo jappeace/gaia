@@ -1,4 +1,4 @@
-[![https://jappieklooster.nl](https://img.shields.io/badge/blog-jappieklooster.nl-lightgrey?style=for-the-badge)](https://jappieklooster.nl/my-thesis.html)
+![https://jappieklooster.nl](https://img.shields.io/badge/blog-jappieklooster.nl-lightgrey?style=for-the-badge)](https://jappieklooster.nl/my-thesis.html)
 
 This is a chatbot that can have varied respones depening on personality.
 Personality is implemented as a process.
