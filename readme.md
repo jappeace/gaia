@@ -1,4 +1,4 @@
-#+TITLE: Gaia chatbot
+[![https://jappieklooster.nl](https://img.shields.io/badge/blog-jappieklooster.nl-lightgrey?style=for-the-badge)](https://jappieklooster.nl/my-thesis.html)
 
 This is a chatbot that can have varied respones depening on personality.
 Personality is implemented as a process.
@@ -11,7 +11,7 @@ On top of this base idea we added various mechanisms of letting the chatbot
 decide which connections to take, such as `perlocutionary values' or `goals'
 amongst other things.
 
-The core of the system is the [[https://www.drools.org/][drools rule engine]],
+The core of the system is the [drools rule engine](https://www.drools.org/),
 because of this chatbot is incredibly flexible.
 You can for example quite easily create a rule that detects if the user repeats
 himself and setup a scene to handle that.
@@ -36,12 +36,12 @@ This should work for most cases and otherwise is easily adaptable (254 lines).
 We refer to the thesis for an extended description,
 or for programmers I wrote a blog post.
 
-* Executing
-[[http://openjdk.java.net/install/index.html][Install a jdk]], then to run you can use gradlew:
+# Executing
+[Install a jdk](http://openjdk.java.net/install/index.html), then to run you can use gradlew:
 
-#+BEGIN_SRC sh
+```sh
 ./graldew run
-#+END_SRC
+```
 
 Or if you have gradle you can replace that with gradle
 (if you don't have gradle just use gradlew it's rocksolid).
@@ -49,7 +49,7 @@ Or if you have gradle you can replace that with gradle
 The application is already embeded into a website,
 however you could make swing based clients relativly easily.
 
-* TODO todo
+# TODO todo
 + Update readme
   + Difference from ALICE (both images)
   + The mapping with connections
@@ -62,7 +62,7 @@ however you could make swing based clients relativly easily.
 + Add citations (for salve game for example)
 + Add thesis (once completed)
 
-** Done
+## Done
  + ScalaJS + Akka http in gradle
  + copied source code over from old maven build
  + Connect akkahttp server to drools chatbot
@@ -70,8 +70,8 @@ however you could make swing based clients relativly easily.
    + Make sure git fame says pracitcally 0 lines are from manuel
    + Copy to a new repository so that we don't commit infringement on history
 
-* License
-The reference project is MIT, because I modified [[https://github.com/jrudolph/akka-http-scala-js-websocket-chat][this project]].
+# License
+The reference project is MIT, because I modified [this project](https://github.com/jrudolph/akka-http-scala-js-websocket-chat).
 The chatbot is licensed under LGPLv2,
 this allows it to be used as a dynamic library while still urging people to
 contribute back.
@@ -83,4 +83,4 @@ Finally the conversion script is licensed under GPLv2,
 I hope people will share their contributions to this script
 (but once ran you no longer need it).
 
-If your project requires different licenses please contact [[https://jappieklooster.nl][me]].
+If your project requires different licenses please contact [me](https://jappieklooster.nl).
